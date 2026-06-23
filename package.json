@@ -1,0 +1,26 @@
+{
+  "name": "gashuna-hotel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Gashuna Hotel Management System — Dangla, Awi Zone, Amhara Region, Ethiopia",
+  "author": "Gashuna Hotel",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently -n CLIENT,SERVER -c cyan,green \"npm run dev -w client\" \"npm run dev -w server\"",
+    "dev:client": "npm run dev -w client",
+    "dev:server": "npm run dev -w server",
+    "build": "npm run build -w client && npm run build -w server",
+    "seed": "npm run seed -w server",
+    "lint": "npm run lint -w client && npm run lint -w server"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.18.0",
+    "npm": ">=9.0.0"
+  }
+}
