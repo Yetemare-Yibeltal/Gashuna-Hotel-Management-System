@@ -1,0 +1,89 @@
+{
+  "compilerOptions": {
+
+    // ── Output ────────────────────────────────────────────
+    // Compile TypeScript to modern JavaScript
+    "target": "ES2020",
+
+    // Node.js uses CommonJS modules
+    "module": "commonjs",
+
+    // Include Node.js and ES2020 type definitions
+    "lib": ["ES2020"],
+
+    // Output compiled JavaScript files to dist/
+    "outDir": "./dist",
+
+    // Source files are inside src/
+    "rootDir": "./src",
+
+    // ── Module Resolution ─────────────────────────────────
+    // Use Node.js module resolution strategy
+    "moduleResolution": "node",
+
+    // Allow importing JSON files directly
+    "resolveJsonModule": true,
+
+    // Allow default imports from CommonJS modules
+    "esModuleInterop": true,
+
+    // Allow importing modules without file extensions
+    "allowSyntheticDefaultImports": true,
+
+    // ── Type Checking ─────────────────────────────────────
+    // Enable all strict type checks
+    "strict": true,
+
+    // Skip type checking on library files for speed
+    "skipLibCheck": true,
+
+    // Force consistent casing in file names
+    "forceConsistentCasingInFileNames": true,
+
+    // Error on variables declared but never used
+    "noUnusedLocals": true,
+
+    // Error on function parameters never used
+    "noUnusedParameters": true,
+
+    // Error on switch cases that fall through
+    "noFallthroughCasesInSwitch": true,
+
+    // ── Source Maps ───────────────────────────────────────
+    // Generate source maps for debugging
+    "sourceMap": true,
+
+    // Include source code in source maps
+    "inlineSources": true,
+
+    // ── Decorators ────────────────────────────────────────
+    // Enable experimental decorators (needed by some packages)
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    // ── Path Aliases ─────────────────────────────────────
+    // Allows clean imports like @/models/User
+    "baseUrl": ".",
+    "paths": {
+      "@/*":               ["src/*"],
+      "@/config/*":        ["src/config/*"],
+      "@/models/*":        ["src/models/*"],
+      "@/controllers/*":   ["src/controllers/*"],
+      "@/routes/*":        ["src/routes/*"],
+      "@/middleware/*":    ["src/middleware/*"],
+      "@/utils/*":         ["src/utils/*"],
+      "@/seed/*":          ["src/seed/*"]
+    }
+  },
+
+  // Only compile files inside src/
+  "include": ["src/**/*.ts"],
+
+  // Never compile these
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}
