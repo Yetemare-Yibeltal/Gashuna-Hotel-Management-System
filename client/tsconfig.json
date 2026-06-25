@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    // Compile to modern JavaScript
+    "target": "ES2020",
+
+    // Include browser and modern JS type definitions
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    // Use the new class field behavior
+    "useDefineForClassFields": true,
+
+    // Use ESModules
+    "module": "ESNext",
+
+    // Skip type checking on library files for faster builds
+    "skipLibCheck": true,
+
+    // ── Module resolution ────────────────────────────────
+    // Bundler mode works best with Vite
+    "moduleResolution": "bundler",
+
+    // Allow importing .ts and .tsx files with extensions
+    "allowImportingTsExtensions": true,
+
+    // Allow importing JSON files
+    "resolveJsonModule": true,
+
+    // Each file is treated as an isolated module
+    "isolatedModules": true,
+
+    // Vite handles the output — TypeScript just checks types
+    "noEmit": true,
+
+    // Use React 18 JSX transform (no need to import React in every file)
+    "jsx": "react-jsx",
+
+    // ── Strict type checking ─────────────────────────────
+    // Catches most bugs before runtime
+    "strict": true,
+
+    // Error on variables that are declared but never used
+    "noUnusedLocals": true,
+
+    // Error on function parameters that are never used
+    "noUnusedParameters": true,
+
+    // Error on switch statements that fall through cases
+    "noFallthroughCasesInSwitch": true,
+
+    // ── Path aliases ─────────────────────────────────────
+    // Must match the alias in vite.config.ts
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+
+  // Only include files inside src/
+  "include": ["src"],
+
+  // Reference the node-specific tsconfig for vite.config.ts
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

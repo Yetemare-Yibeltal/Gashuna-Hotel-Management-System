@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    // This config is specifically for vite.config.ts
+    // It runs in Node.js, not the browser
+
+    // Required for project references to work
+    "composite": true,
+
+    // Skip type checking library files
+    "skipLibCheck": true,
+
+    // Use ESModules
+    "module": "ESNext",
+
+    // Node module resolution for vite config
+    "moduleResolution": "bundler",
+
+    // Allow default imports from CommonJS modules
+    "allowSyntheticDefaultImports": true,
+
+    // Enable all strict type checks
+    "strict": true
+  },
+
+  // Only applies to the vite config file
+  "include": ["vite.config.ts"]
+}
