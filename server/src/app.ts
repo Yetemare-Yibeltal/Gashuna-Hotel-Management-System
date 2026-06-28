@@ -1,251 +1,164 @@
+// server/src/app.ts
+// ─────────────────────────────────────────────────────────────
+// EXPRESS APPLICATION SETUP — Gashuna Hotel Management System
+//
+// This file creates and configures the Express app.
+// It sets up all middleware and mounts all API routes.
+// It does NOT start the server — server.ts does that.
+// ─────────────────────────────────────────────────────────────
+
+import express, { Application, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import path from 'path';
 
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import express, {
-  type Application,
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
+// ── Import Middleware ─────────────────────────────────────────
+import { notFound, errorHandler } from './middleware/errorMiddleware';
+import { apiLimiter } from './middleware/rateLimiter';
 
-import { config } from './config/env';
-import { corsOptions } from './config/corsOptions';
-import { redis } from './config/redis';
-import { checkDBHealth } from './lib/db';
-import { logger } from './lib/logger';
-import { auditLogMiddleware } from './middleware/auditLog';
-import {
-  compressionMiddleware,
-  responseTimeMiddleware,
-} from './middleware/compression';
-import { errorHandler } from './middleware/errorHandler';
-import {
-  additionalSecurityHeaders,
-  helmetMiddleware,
-} from './middleware/helmet';
-import { ipBlockMiddleware } from './middleware/ipBlock';
-import { notFound } from './middleware/notFound';
-import { generalLimiter } from './middleware/rateLimiter';
-import {
-  morganLogger,
-  requestLogger,
-} from './middleware/requestLogger';
-import { sanitizeMiddleware } from './middleware/sanitize';
-import { xssMiddleware } from './middleware/xss';
-import { apiRouter } from './routes/index';
+// ── Import Routes ─────────────────────────────────────────────
+// These will be uncommented as we build each module
+// import authRoutes from './routes/authRoutes';
+// import roomRoutes from './routes/roomRoutes';
+// import guestRoutes from './routes/guestRoutes';
+// import bookingRoutes from './routes/bookingRoutes';
+// import invoiceRoutes from './routes/invoiceRoutes';
+// import paymentRoutes from './routes/paymentRoutes';
+// import menuRoutes from './routes/menuRoutes';
+// import foodOrderRoutes from './routes/foodOrderRoutes';
+// import staffRoutes from './routes/staffRoutes';
+// import attendanceRoutes from './routes/attendanceRoutes';
+// import payrollRoutes from './routes/payrollRoutes';
+// import inventoryRoutes from './routes/inventoryRoutes';
+// import serviceRoutes from './routes/serviceRoutes';
+// import serviceRequestRoutes from './routes/serviceRequestRoutes';
+// import housekeepingRoutes from './routes/housekeepingRoutes';
+// import maintenanceRoutes from './routes/maintenanceRoutes';
+// import reportRoutes from './routes/reportRoutes';
+// import notificationRoutes from './routes/notificationRoutes';
+// import dashboardRoutes from './routes/dashboardRoutes';
+// import settingsRoutes from './routes/settingsRoutes';
+// import uploadRoutes from './routes/uploadRoutes';
 
-// ─── Format uptime helper ─────────────────────────────────
-const formatUptime = (seconds: number): string => {
-  const days = Math.floor(seconds / 86400);
-  const hours = Math.floor((seconds % 86400) / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
+// ── Create Express App ────────────────────────────────────────
+const app: Application = express();
 
-  const parts: string[] = [];
-  if (days > 0) parts.push(`${days}d`);
-  if (hours > 0) parts.push(`${hours}h`);
-  if (minutes > 0) parts.push(`${minutes}m`);
-  parts.push(`${secs}s`);
+// ── Security Middleware ───────────────────────────────────────
+// Helmet sets secure HTTP headers to protect against
+// common attacks like XSS, clickjacking, etc.
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
 
-  return parts.join(' ');
-};
+// ── CORS Configuration ────────────────────────────────────────
+// Allows the React frontend to make requests to this API
+// In development: http://localhost:5173 (Vite dev server)
+// In production: the deployed frontend URL
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'http://localhost:5173',
+  'http://localhost:3000',
+];
 
-// ─── Create Express application ───────────────────────────
-export const createApp = (): Application => {
-  const app = express();
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, Thunder Client)
+      if (!origin) return callback(null, true);
 
-  // ─── Trust proxy ──────────────────────────────────────
-  // Required for accurate IP detection behind Nginx reverse proxy
-  app.set('trust proxy', 1);
-
-  // ─── Disable fingerprinting ───────────────────────────
-  app.disable('x-powered-by');
-  app.disable('etag');
-
-  // ─── Security middleware ──────────────────────────────
-  // MUST be first — sets security headers on every response
-  app.use(helmetMiddleware);
-  app.use(additionalSecurityHeaders);
-
-  // ─── CORS ─────────────────────────────────────────────
-  // Must come before other middleware to handle preflight
-  app.use(cors(corsOptions));
-
-  // ─── IP blocking ──────────────────────────────────────
-  // Block banned IPs before any processing
-  app.use(ipBlockMiddleware);
-
-  // ─── Compression ──────────────────────────────────────
-  app.use(compressionMiddleware);
-  app.use(responseTimeMiddleware);
-
-  // ─── Request logging ──────────────────────────────────
-  app.use(morganLogger);
-  app.use(requestLogger);
-
-  // ─── Rate limiting ────────────────────────────────────
-  app.use(generalLimiter);
-
-  // ─── Body parsers ─────────────────────────────────────
-  // Parse JSON bodies — 10mb limit for bulk imports
-  app.use(
-    express.json({
-      limit: '10mb',
-      strict: true,
-      type: ['application/json', 'application/csp-report'],
-    }),
-  );
-
-  // Parse URL-encoded bodies — for form submissions
-  app.use(
-    express.urlencoded({
-      extended: true,
-      limit: '10mb',
-    }),
-  );
-
-  // Parse signed cookies — used for JWT httpOnly cookies
-  app.use(cookieParser(config.COOKIE_SECRET));
-
-  // ─── Input sanitization ───────────────────────────────
-  // MUST come after body parsers
-  app.use(sanitizeMiddleware);
-  app.use(xssMiddleware);
-
-  // ─── Static file serving ──────────────────────────────
-  // Serve uploaded farmer photos publicly
-  app.use(
-    '/uploads',
-    (req: Request, _res: Response, next: NextFunction) => {
-      logger.info(`Static file request: ${req.path}`);
-      next();
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS policy does not allow origin: ${origin}`));
+      }
     },
-    express.static(path.join(process.cwd(), config.UPLOAD_DIR), {
-      maxAge: '7d',
-      etag: true,
-      lastModified: true,
-      dotfiles: 'deny',
-      index: false,
-      redirect: false,
-      setHeaders: (res: Response) => {
-        res.setHeader('X-Content-Type-Options', 'nosniff');
-        res.setHeader('Cache-Control', 'public, max-age=604800');
-      },
-    }),
-  );
+    credentials: true, // Allow cookies to be sent with requests
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
-  // Serve generated export files (PDF and Excel)
-  app.use(
-    '/exports',
-    express.static(path.join(process.cwd(), config.EXPORT_DIR), {
-      maxAge: '1h',
-      etag: true,
-      lastModified: true,
-      dotfiles: 'deny',
-      index: false,
-      redirect: false,
-    }),
-  );
+// ── Request Logging ───────────────────────────────────────────
+// Morgan logs every incoming request during development
+// Format: METHOD /path STATUS responseTime ms
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
-  // ─── Root endpoint ────────────────────────────────────
-  app.get('/', (_req: Request, res: Response) => {
-    res.status(200).json({
-      success: true,
-      message: 'AgroEthiopia MIS API',
-      description:
-        'Ethiopian Agriculture Management Information System',
-      version: '1.0.0',
-      documentation: `${config.BACKEND_URL}${config.API_PREFIX}`,
-      health: `${config.BACKEND_URL}/health`,
-      timestamp: new Date().toISOString(),
-    });
+// ── Body Parsing Middleware ───────────────────────────────────
+// Parse incoming JSON request bodies
+// limit: 10mb allows for image uploads as base64
+app.use(express.json({ limit: '10mb' }));
+
+// Parse URL-encoded form data
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// ── Cookie Parser ─────────────────────────────────────────────
+// Allows reading cookies from requests
+// Used for JWT authentication tokens
+app.use(cookieParser());
+
+// ── Rate Limiting ─────────────────────────────────────────────
+// Limits each IP to 100 requests per 15 minutes
+// Protects against brute force attacks and DDoS
+app.use('/api', apiLimiter);
+
+// ── Static Files ──────────────────────────────────────────────
+// Serve uploaded files (room images, staff photos etc.)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// ── Health Check ──────────────────────────────────────────────
+// Simple endpoint to verify the server is running
+// Used by deployment platforms and monitoring tools
+app.get('/api/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: 'Gashuna Hotel API is running',
+    hotel: process.env.HOTEL_NAME || 'Gashuna Hotel',
+    location: 'Dangla, Awi Zone, Amhara Region, Ethiopia',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
+    uptime: `${Math.floor(process.uptime())} seconds`,
   });
+});
 
-  // ─── Ping endpoint ────────────────────────────────────
-  app.get('/ping', (_req: Request, res: Response) => {
-    res.status(200).json({
-      success: true,
-      message: 'pong',
-      timestamp: new Date().toISOString(),
-    });
-  });
+// ── API Routes ────────────────────────────────────────────────
+// All routes are prefixed with /api
+// Routes are mounted here as each module is built
+// app.use('/api/auth', authRoutes);
+// app.use('/api/rooms', roomRoutes);
+// app.use('/api/guests', guestRoutes);
+// app.use('/api/bookings', bookingRoutes);
+// app.use('/api/invoices', invoiceRoutes);
+// app.use('/api/payments', paymentRoutes);
+// app.use('/api/menu', menuRoutes);
+// app.use('/api/food-orders', foodOrderRoutes);
+// app.use('/api/staff', staffRoutes);
+// app.use('/api/attendance', attendanceRoutes);
+// app.use('/api/payroll', payrollRoutes);
+// app.use('/api/inventory', inventoryRoutes);
+// app.use('/api/services', serviceRoutes);
+// app.use('/api/service-requests', serviceRequestRoutes);
+// app.use('/api/housekeeping', housekeepingRoutes);
+// app.use('/api/maintenance', maintenanceRoutes);
+// app.use('/api/reports', reportRoutes);
+// app.use('/api/notifications', notificationRoutes);
+// app.use('/api/dashboard', dashboardRoutes);
+// app.use('/api/settings', settingsRoutes);
+// app.use('/api/upload', uploadRoutes);
 
-  // ─── Full health check endpoint ───────────────────────
-  // Checks database and Redis connectivity
-  app.get('/health', async (_req: Request, res: Response) => {
-    const dbHealth = await checkDBHealth();
+// ── 404 Handler ───────────────────────────────────────────────
+// If no route matched, return a 404 error
+// This must come AFTER all routes
+app.use(notFound);
 
-    let redisHealthy = false;
-    let redisLatencyMs: number | undefined;
+// ── Global Error Handler ──────────────────────────────────────
+// Catches all errors thrown anywhere in the application
+// and returns a clean JSON error response
+// This must be the LAST middleware
+app.use(errorHandler);
 
-    try {
-      const redisStart = Date.now();
-      const redisPing = await redis.ping();
-      redisLatencyMs = Date.now() - redisStart;
-      redisHealthy = redisPing === 'PONG';
-    } catch {
-      redisHealthy = false;
-    }
-
-    const allHealthy = dbHealth.healthy && redisHealthy;
-    const memoryUsage = process.memoryUsage();
-
-    res.status(allHealthy ? 200 : 503).json({
-      success: allHealthy,
-      status: allHealthy ? 'healthy' : 'degraded',
-      service: 'agro-ethiopia-mis-backend',
-      version: process.env.npm_package_version || '1.0.0',
-      environment: config.NODE_ENV,
-      timestamp: new Date().toISOString(),
-      checks: {
-        database: {
-          healthy: dbHealth.healthy,
-          latencyMs: dbHealth.latencyMs,
-          error: dbHealth.error || null,
-        },
-        redis: {
-          healthy: redisHealthy,
-          latencyMs: redisLatencyMs || null,
-        },
-        memory: {
-          heapUsedMB: Math.round(
-            memoryUsage.heapUsed / 1024 / 1024,
-          ),
-          heapTotalMB: Math.round(
-            memoryUsage.heapTotal / 1024 / 1024,
-          ),
-          rssMB: Math.round(memoryUsage.rss / 1024 / 1024),
-          externalMB: Math.round(
-            memoryUsage.external / 1024 / 1024,
-          ),
-        },
-        uptime: {
-          seconds: Math.round(process.uptime()),
-          human: formatUptime(process.uptime()),
-        },
-      },
-    });
-  });
-
-  // ─── Audit log middleware ─────────────────────────────
-  // Must come before API routes
-  app.use(auditLogMiddleware);
-
-  // ─── API routes ───────────────────────────────────────
-  // All API endpoints mounted under /api/v1
-  app.use(config.API_PREFIX, apiRouter);
-
-  // ─── 404 handler ─────────────────────────────────────
-  // Must come after ALL routes
-  app.use(notFound);
-
-  // ─── Global error handler ─────────────────────────────
-  // Must be the LAST middleware
-  // Express requires exactly 4 arguments for error handlers
-  app.use(errorHandler);
-
-  return app;
-};
-
-export default createApp;
+export default app;
