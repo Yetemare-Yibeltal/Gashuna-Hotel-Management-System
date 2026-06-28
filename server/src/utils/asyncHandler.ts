@@ -11,14 +11,14 @@
 //       const room = await Room.findById(req.params.id);
 //       res.json(room);
 //     } catch (error) {
-//       next(error); // must remember to call next(error)
+//       next(error);
 //     }
 //   };
 //
 // WITH asyncHandler — clean and no try/catch needed:
 //   export const getRoom = asyncHandler(async (req, res) => {
 //     const room = await Room.findById(req.params.id);
-//     res.json(room); // errors are caught automatically
+//     res.json(room);
 //   });
 // ─────────────────────────────────────────────────────────────
 
@@ -38,9 +38,6 @@ type AsyncHandler = (
 // which triggers the global error handler in errorMiddleware.ts
 const asyncHandler = (fn: AsyncHandler) => {
   return (req: Request, res: Response, next: NextFunction): void => {
-    // Execute the async function and catch any errors
-    // If fn throws or rejects, the error goes to next()
-    // which passes it to the global error handler
     Promise.resolve(fn(req, res, next)).catch(next);
   };
 };
