@@ -3,8 +3,7 @@
 // PAYROLL MODEL — Gashuna Hotel Management System
 //
 // Represents one staff member's payroll record for one
-// calendar month. Generated automatically at the end of each
-// month based on:
+// calendar month. Generated at the end of each month based on:
 //   - Base salary (from the Staff model)
 //   - Attendance deductions (absences without leave)
 //   - Bonuses (performance, holiday bonus, etc.)
@@ -24,7 +23,7 @@ import { Schema, model, Document, Model, Types } from 'mongoose';
 // ── Type Definitions ──────────────────────────────────────────
 export type PayrollStatus = 'draft' | 'approved' | 'paid';
 
-export type PayrollPaymentMethod = 'cash' | 'bank_transfer' | 'telebirr';
+export type PayrollPaymentMethod = 'cash' | 'bank_transfer' | 'telebirr' | 'chapa';
 
 // ── Payroll Document Interface ────────────────────────────────
 export interface IPayroll extends Document {
@@ -137,9 +136,11 @@ const payrollSchema = new Schema<IPayroll>(
       default: 'draft',
     },
 
+    // Added 'chapa' as an option — some hotels disburse
+    // salary advances or small payments via Chapa mobile transfer
     paymentMethod: {
       type: String,
-      enum: ['cash', 'bank_transfer', 'telebirr'],
+      enum: ['cash', 'bank_transfer', 'telebirr', 'chapa'],
     },
 
     paidAt: {
@@ -158,10 +159,7 @@ const payrollSchema = new Schema<IPayroll>(
 
 // ── Indexes ────────────────────────────────────────────────────
 // One staff member should only have one payroll record per month
-attendanceIndex: payrollSchema.index(
-  { staff: 1, month: 1, year: 1 },
-  { unique: true }
-);
+payrollSchema.index({ staff: 1, month: 1, year: 1 }, { unique: true });
 
 // Speeds up generating payroll reports for a specific month
 payrollSchema.index({ month: 1, year: 1 });
