@@ -24,10 +24,6 @@
 //   PAYMENT  → a payment was recorded or updated
 //   EXPORT   → a report or data was exported
 //   SETTINGS → system settings were changed
-//
-// Resources tracked (which type of record was affected):
-//   User, Room, Guest, Booking, Invoice, Payment,
-//   Staff, Payroll, Inventory, Service, Settings
 // ─────────────────────────────────────────────────────────────
 
 import { Schema, model, Document, Model, Types } from 'mongoose';
@@ -81,6 +77,13 @@ export interface IAuditLog extends Document {
   errorMessage?: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// ── Static Methods Interface ──────────────────────────────────
+// This is the key fix — we declare the static method here
+// so TypeScript knows it exists on the Model
+export interface IAuditLogModel extends Model<IAuditLog> {
+  logAction(data: Partial<IAuditLog>): Promise<void>;
 }
 
 // ── Audit Log Schema ───────────────────────────────────────────
@@ -155,35 +158,30 @@ const auditLogSchema = new Schema<IAuditLog>(
     },
 
     // The MongoDB _id of the specific record that was affected
-    // Example: the booking ID that was cancelled
     resourceId: {
       type: String,
     },
 
     // Human-readable description of what happened
-    // Example: "Receptionist Selamawit checked in guest
-    //           Abebe Girma to Room 201 (Tana Deluxe)"
     description: {
       type: String,
       required: [true, 'Audit description is required'],
       trim: true,
     },
 
-    // Snapshot of the record's data BEFORE the change
+    // Snapshot of the record BEFORE the change
     // Only stored for UPDATE and DELETE actions
-    // Allows reconstruction of what the data looked like before
     previousData: {
       type: Schema.Types.Mixed,
     },
 
-    // Snapshot of the record's data AFTER the change
+    // Snapshot of the record AFTER the change
     // Only stored for CREATE and UPDATE actions
     newData: {
       type: Schema.Types.Mixed,
     },
 
     // IP address of the device that made the request
-    // Used to detect suspicious activity from unusual locations
     ipAddress: {
       type: String,
       trim: true,
@@ -196,7 +194,6 @@ const auditLogSchema = new Schema<IAuditLog>(
     },
 
     // Whether the action completed successfully
-    // false if the action was attempted but failed
     success: {
       type: Boolean,
       default: true,
@@ -214,16 +211,9 @@ const auditLogSchema = new Schema<IAuditLog>(
 );
 
 // ── Indexes ────────────────────────────────────────────────────
-// Speeds up filtering audit logs by user (who did this?)
 auditLogSchema.index({ user: 1, createdAt: -1 });
-
-// Speeds up filtering by action type
 auditLogSchema.index({ action: 1 });
-
-// Speeds up filtering by resource type and specific record
 auditLogSchema.index({ resource: 1, resourceId: 1 });
-
-// Speeds up date range queries (show logs from last 7 days)
 auditLogSchema.index({ createdAt: -1 });
 
 // ── Virtual: Formatted Date ───────────────────────────────────
@@ -242,8 +232,9 @@ auditLogSchema.virtual('formattedDate').get(function (
 auditLogSchema.set('toJSON', { virtuals: true });
 auditLogSchema.set('toObject', { virtuals: true });
 
-// ── Static Method: Log Action ─────────────────────────────────
+// ── Static Method: logAction ──────────────────────────────────
 // Helper used throughout controllers to quickly log an action
+// Declared as a static method on the schema and typed above
 // Usage:
 //   await AuditLog.logAction({
 //     user: req.user._id,
@@ -263,13 +254,14 @@ auditLogSchema.statics.logAction = async function (
     await this.create(data);
   } catch (error) {
     // Audit logging should never crash the main request
-    // Log the error but do not throw it
     console.error('❌ Failed to create audit log:', error);
   }
 };
 
 // ── Create and Export Model ───────────────────────────────────
-const AuditLog: Model<IAuditLog> = model<IAuditLog>(
+// We use IAuditLogModel instead of Model<IAuditLog>
+// so TypeScript knows about the logAction static method
+const AuditLog = model<IAuditLog, IAuditLogModel>(
   'AuditLog',
   auditLogSchema
 );
