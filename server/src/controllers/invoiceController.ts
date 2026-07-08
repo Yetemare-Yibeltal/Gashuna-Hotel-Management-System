@@ -1,22 +1,3 @@
-// server/src/controllers/invoiceController.ts
-// ─────────────────────────────────────────────────────────────
-// INVOICE CONTROLLER — Gashuna Hotel Management System
-//
-// Handles all billing and invoice operations:
-//   GET    /api/invoices              → all invoices with filters
-//   GET    /api/invoices/stats        → invoice statistics
-//   GET    /api/invoices/:id          → single invoice detail
-//   POST   /api/invoices              → create new invoice
-//   PUT    /api/invoices/:id          → update invoice
-//   POST   /api/invoices/:id/items    → add line item to invoice
-//   DELETE /api/invoices/:id/items/:itemIndex → remove line item
-//   PATCH  /api/invoices/:id/issue    → issue invoice to guest
-//   PATCH  /api/invoices/:id/pay      → mark invoice as paid
-//   PATCH  /api/invoices/:id/cancel   → cancel invoice
-//   POST   /api/invoices/:id/email    → email invoice to guest
-//   GET    /api/invoices/booking/:bookingId → invoice by booking
-// ─────────────────────────────────────────────────────────────
-
 import { Request, Response, NextFunction } from 'express';
 import asyncHandler from '../utils/asyncHandler';
 import AppError from '../utils/AppError';
