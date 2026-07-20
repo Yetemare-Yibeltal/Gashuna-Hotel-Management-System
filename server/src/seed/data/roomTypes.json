@@ -1,0 +1,166 @@
+[
+  {
+    "slug": "standard",
+    "name": "Standard Room",
+    "nameAmharic": "መደበኛ ክፍል",
+    "tagline": "Comfort meets Ethiopian warmth",
+    "description": "Our Standard Rooms offer a comfortable retreat with authentic Ethiopian hospitality. Each room features modern amenities while maintaining the warm character of the Awi Zone region. Perfect for business travelers and solo adventurers exploring Dangla and the surrounding highlands.",
+    "highlights": [
+      "Comfortable double or twin beds with premium linen",
+      "Garden or courtyard views",
+      "Private bathroom with hot water",
+      "Free WiFi throughout",
+      "Ethiopian coffee service"
+    ],
+    "standardAmenities": [
+      "Free WiFi",
+      "Air conditioning",
+      "Flat-screen TV",
+      "Private bathroom",
+      "Hot water",
+      "Daily housekeeping",
+      "Ethiopian coffee",
+      "Room safe",
+      "Writing desk",
+      "Wardrobe"
+    ],
+    "minPrice": 1600,
+    "maxPrice": 1800,
+    "maxCapacity": 2,
+    "recommendedFor": [
+      "Solo travelers",
+      "Business travelers",
+      "Budget-conscious guests"
+    ],
+    "displayOrder": 1,
+    "isActive": true
+  },
+  {
+    "slug": "deluxe",
+    "name": "Deluxe Room",
+    "nameAmharic": "ድሉክስ ክፍል",
+    "tagline": "Elevated comfort with highland views",
+    "description": "Experience elevated comfort in our Deluxe Rooms, featuring stunning views of the Gojjam highlands and the beautiful Awi Zone landscape. These upgraded rooms offer superior furnishings, a spacious layout, and enhanced amenities for a truly memorable stay in Dangla.",
+    "highlights": [
+      "Panoramic highland and mountain views",
+      "King or queen bed with luxury linen",
+      "Enhanced bathroom with premium toiletries",
+      "Sitting area with armchair",
+      "Mini-fridge stocked with local beverages"
+    ],
+    "standardAmenities": [
+      "Free WiFi",
+      "Air conditioning",
+      "Flat-screen TV",
+      "Private bathroom",
+      "Hot water",
+      "Bathtub and shower",
+      "Daily housekeeping",
+      "Ethiopian coffee",
+      "Mini-fridge",
+      "Room safe",
+      "Writing desk",
+      "Wardrobe",
+      "Sitting area",
+      "Premium toiletries"
+    ],
+    "minPrice": 2600,
+    "maxPrice": 2800,
+    "maxCapacity": 2,
+    "recommendedFor": [
+      "Couples",
+      "Leisure travelers",
+      "Guests seeking comfort upgrades"
+    ],
+    "displayOrder": 2,
+    "isActive": true
+  },
+  {
+    "slug": "junior_suite",
+    "name": "Junior Suite",
+    "nameAmharic": "ጁኒየር ሱይት",
+    "tagline": "Space and luxury in the heart of Dangla",
+    "description": "Our Junior Suites provide a spacious retreat with a separate living area, perfect for extended stays or guests who desire extra space. Named after the great administrative areas of the Awi Zone, these suites combine contemporary luxury with Ethiopian cultural touches throughout.",
+    "highlights": [
+      "Separate living room and bedroom",
+      "King bed with premium bedding",
+      "Large private bathroom with jacuzzi",
+      "Private balcony with highland views",
+      "Complimentary welcome fruit basket"
+    ],
+    "standardAmenities": [
+      "Free WiFi",
+      "Air conditioning",
+      "Two flat-screen TVs",
+      "Private bathroom with jacuzzi",
+      "Hot water",
+      "Daily housekeeping",
+      "Ethiopian coffee ceremony",
+      "Mini-bar",
+      "Room safe",
+      "Writing desk",
+      "Wardrobe",
+      "Separate living area",
+      "Private balcony",
+      "Premium toiletries",
+      "Welcome fruit basket",
+      "Evening turndown service"
+    ],
+    "minPrice": 4000,
+    "maxPrice": 4200,
+    "maxCapacity": 3,
+    "recommendedFor": [
+      "Families",
+      "Extended stays",
+      "Special occasions",
+      "Business executives"
+    ],
+    "displayOrder": 3,
+    "isActive": true
+  },
+  {
+    "slug": "suite",
+    "name": "Presidential Suite",
+    "nameAmharic": "ፕሬዚዳንታዊ ሱይት",
+    "tagline": "The pinnacle of luxury in Dangla",
+    "description": "The Presidential Suite at Gashuna Hotel represents the absolute pinnacle of luxury accommodation in the Awi Zone. Featuring 360-degree panoramic views of Dangla and the majestic Gojjam mountains, this extraordinary suite offers an unparalleled experience that combines world-class amenities with authentic Ethiopian grandeur.",
+    "highlights": [
+      "360-degree panoramic views of Dangla and Gojjam mountains",
+      "Two bedrooms with king beds",
+      "Full dining room for private meals",
+      "Private butler service",
+      "Rooftop terrace access"
+    ],
+    "standardAmenities": [
+      "Free WiFi — dedicated high-speed connection",
+      "Climate control system",
+      "Multiple flat-screen TVs",
+      "Two private bathrooms",
+      "Jacuzzi and rain shower",
+      "Full kitchen",
+      "Private dining room",
+      "Private butler service",
+      "Daily housekeeping — twice daily",
+      "Full Ethiopian coffee ceremony",
+      "Fully stocked mini-bar",
+      "Room safe",
+      "Private balcony and rooftop terrace",
+      "Premium Ethiopian and international toiletries",
+      "Welcome champagne and fruit",
+      "Evening turndown service",
+      "Airport transfer included",
+      "Complimentary breakfast"
+    ],
+    "minPrice": 7000,
+    "maxPrice": 7500,
+    "maxCapacity": 4,
+    "recommendedFor": [
+      "VIP guests",
+      "Honeymoon couples",
+      "Government officials",
+      "Corporate executives"
+    ],
+    "displayOrder": 4,
+    "isActive": true
+  }
+]

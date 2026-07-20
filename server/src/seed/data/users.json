@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Gashuna Admin",
+    "email": "admin@gashuna.com",
+    "password": "Gashuna@2025",
+    "role": "admin",
+    "phone": "+251918000001",
+    "isActive": true
+  },
+  {
+    "name": "Yibeltal Manager",
+    "email": "manager@gashuna.com",
+    "password": "Gashuna@2025",
+    "role": "manager",
+    "phone": "+251918000002",
+    "isActive": true
+  },
+  {
+    "name": "Selamawit Receptionist",
+    "email": "reception@gashuna.com",
+    "password": "Gashuna@2025",
+    "role": "receptionist",
+    "phone": "+251918000003",
+    "isActive": true
+  }
+]
