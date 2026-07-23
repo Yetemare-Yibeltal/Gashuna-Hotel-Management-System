@@ -11,10 +11,9 @@ import {
   analyzeGuestFeedback,
 } from '../services/sentimentService';
 import { AuthRequest } from '../../middleware/authMiddleware';
-import Booking from '../../../models/Booking';
-import Invoice from '../../../models/Invoice';
-import Guest from '../../../models/Guest';
-
+import Booking from '../../models/Booking';
+import Invoice from '../../models/Invoice';
+import Guest from '../../models/Guest';
 export const getOccupancyPrediction = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     const prediction = await predictOccupancy();
