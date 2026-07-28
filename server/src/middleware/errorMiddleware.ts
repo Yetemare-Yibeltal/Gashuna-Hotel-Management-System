@@ -173,8 +173,8 @@ export const errorHandler = (
   next: NextFunction
 ): void => {
   // Set default values if not already set by AppError
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
+  (err as any).statusCode = (err as any).statusCode || 500;
+  (err as any).status = (err as any).status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
     // In development send full error details

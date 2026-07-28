@@ -194,7 +194,7 @@ export const startHousekeepingTask = asyncHandler(
     task.startedAt = new Date();
     await task.save();
 
-    const room = task.room as { roomNumber: string };
+    const room = task.room as unknown as { roomNumber: string };
 
     res.status(200).json({
       success: true,
@@ -242,7 +242,7 @@ export const completeHousekeepingTask = asyncHandler(
 
     await task.save();
 
-    const room = task.room as { _id: string; roomNumber: string };
+    const room = task.room as unknown as { _id: string; roomNumber: string };
 
     await Room.findByIdAndUpdate(room._id, { status: 'available' });
 
@@ -316,13 +316,13 @@ export const inspectHousekeepingTask = asyncHandler(
     } else {
       task.status = 'issue_found';
       task.issueDescription = issueDescription || 'Issue found during inspection';
-      const room = task.room as { _id: string };
+      const room = task.room as unknown as { _id: string };
       await Room.findByIdAndUpdate(room._id, { status: 'cleaning' });
     }
 
     await task.save();
 
-    const room = task.room as { roomNumber: string };
+    const room = task.room as unknown as { roomNumber: string };
 
     res.status(200).json({
       success: true,

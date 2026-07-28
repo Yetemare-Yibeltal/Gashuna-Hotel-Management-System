@@ -215,7 +215,7 @@ export const createServiceRequest = asyncHandler(
     });
 
     if (manager) {
-      const guest = request.guest as { fullName: string; vip: boolean };
+      const guest = request.guest as unknown as { fullName: string; vip: boolean };
       await Notification.createNotification({
         recipient: manager._id,
         type: 'info',
@@ -266,7 +266,7 @@ export const confirmServiceRequest = asyncHandler(
     }
     await request.save();
 
-    const service = request.service as { name: string };
+    const service = request.service as unknown as { name: string };
 
     res.status(200).json({
       success: true,
@@ -378,7 +378,7 @@ export const completeServiceRequest = asyncHandler(
     if (notes) request.notes = notes.trim();
     await request.save();
 
-    const service = request.service as { name: string };
+    const service = request.service as unknown as { name: string };
 
     if (req.user) {
       await AuditLog.logAction({

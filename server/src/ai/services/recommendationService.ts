@@ -3,9 +3,9 @@ import {
   RECOMMENDATION_PROMPT,
   GUEST_INSIGHTS_PROMPT,
 } from '../prompts/reportPrompt';
-import Room from '../../../models/Room';
-import Guest from '../../../models/Guest';
-import Booking from '../../../models/Booking';
+import Room from '../../models/Room';
+import Guest from '../../models/Guest';
+import Booking from '../../models/Booking';
 
 export interface RoomRecommendation {
   topRecommendation: {
@@ -90,7 +90,7 @@ export const getPersonalizedRoomRecommendations = async (
       adults,
       children,
       previousRoomTypes: guestHistory.map((b) => {
-        const room = b.room as { type: string; price: number };
+        const room = b.room as unknown as { type: string; price: number };
         return { type: room?.type, price: room?.price };
       }),
       notes: guest.notes || '',

@@ -2,9 +2,9 @@ import { generateStructuredResponse } from './openaiService';
 import {
   PREDICTION_PROMPT,
 } from '../prompts/reportPrompt';
-import Booking from '../../../models/Booking';
-import Invoice from '../../../models/Invoice';
-import Room from '../../../models/Room';
+import Booking from '../../models/Booking';
+import Invoice from '../../models/Invoice';
+import Room from '../../models/Room';
 
 export interface OccupancyPrediction {
   prediction: number;

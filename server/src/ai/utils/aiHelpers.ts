@@ -106,7 +106,7 @@ export const getConversationContext = async (
   const contextParts: string[] = [];
 
   if (conversation.guest) {
-    const guest = conversation.guest as {
+    const guest = conversation.guest as unknown as {
       fullName: string;
       nationality: string;
       vip: boolean;
@@ -121,7 +121,7 @@ export const getConversationContext = async (
   }
 
   if (conversation.user) {
-    const user = conversation.user as { name: string; role: string };
+    const user = conversation.user as unknown as { name: string; role: string };
     contextParts.push(`Staff: ${user.name} (${user.role})`);
   }
 
@@ -227,9 +227,9 @@ export const detectIntentFromMessage = (
 
 export const buildHotelContextForAdmin = async (): Promise<string> => {
   try {
-    const Room = (await import('../../../models/Room')).default;
-    const Booking = (await import('../../../models/Booking')).default;
-    const Invoice = (await import('../../../models/Invoice')).default;
+    const Room = (await import('../../models/Room')).default;
+    const Booking = (await import('../../models/Booking')).default;
+    const Invoice = (await import('../../models/Invoice')).default;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);

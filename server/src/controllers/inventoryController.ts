@@ -63,7 +63,7 @@ export const getInventoryItems = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'name';
     const sortOrder = order === 'desc' ? -1 : 1;
-    const sortObj: Record<string, number> = {
+    const sortObj: any = {
       [sortField]: sortOrder,
     };
 
@@ -359,7 +359,7 @@ export const createInventoryItem = asyncHandler(
         resource: 'Inventory',
         resourceId: item._id.toString(),
         description: `${req.user.name} added new inventory item: ${name} (${category}). Quantity: ${quantity} ${unit}. Unit cost: ${formatETB(Number(unitCost))}`,
-        newData: item.toObject(),
+        newData: item.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -410,7 +410,7 @@ export const updateInventoryItem = asyncHandler(
         resourceId: item._id.toString(),
         description: `${req.user.name} updated inventory item: ${item.name}`,
         previousData,
-        newData: updatedItem.toObject(),
+        newData: updatedItem.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -614,7 +614,7 @@ export const deleteInventoryItem = asyncHandler(
         resource: 'Inventory',
         resourceId: item._id.toString(),
         description: `${req.user.name} deactivated inventory item: ${item.name} (${item.category})`,
-        previousData: item.toObject(),
+        previousData: item.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

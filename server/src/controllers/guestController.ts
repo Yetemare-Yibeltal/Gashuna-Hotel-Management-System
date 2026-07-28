@@ -63,7 +63,7 @@ export const getGuests = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'createdAt';
     const sortOrder = order === 'asc' ? 1 : -1;
-    const sortObj: Record<string, number> = {
+    const sortObj: any = {
       [sortField]: sortOrder,
     };
 
@@ -274,7 +274,7 @@ export const createGuest = asyncHandler(
         resource: 'Guest',
         resourceId: guest._id.toString(),
         description: `${req.user.name} created new guest record: ${fullName} (${phone})`,
-        newData: guest.toObject(),
+        newData: guest.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -339,7 +339,7 @@ export const updateGuest = asyncHandler(
         resourceId: guest._id.toString(),
         description: `${req.user.name} updated guest record: ${guest.fullName}`,
         previousData,
-        newData: updatedGuest.toObject(),
+        newData: updatedGuest.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -490,7 +490,7 @@ export const deleteGuest = asyncHandler(
         resource: 'Guest',
         resourceId: guest._id.toString(),
         description: `${req.user.name} deleted guest record: ${guest.fullName} (${guest.phone})`,
-        previousData: guest.toObject(),
+        previousData: guest.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

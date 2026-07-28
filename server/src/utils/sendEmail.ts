@@ -65,7 +65,7 @@ interface InvoiceEmailData {
 // Creates a Nodemailer transporter using credentials from .env
 // The transporter is the connection to the email server
 const createTransporter = (): nodemailer.Transporter => {
-  const transporter = nodemailer.createTransporter({
+  const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: parseInt(process.env.EMAIL_PORT || '587', 10),
     // true for port 465 (SSL), false for other ports

@@ -69,7 +69,7 @@ export const getMenuItems = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'popular';
     const sortOrder = order === 'asc' ? 1 : -1;
-    const sortObj: Record<string, number> = {
+    const sortObj: any = {
       [sortField]: sortOrder,
       name: 1,
     };
@@ -264,7 +264,7 @@ export const createMenuItem = asyncHandler(
         resource: 'Inventory',
         resourceId: menuItem._id.toString(),
         description: `${req.user.name} added new menu item: ${name} (${category}) — ${formatETB(Number(price))}`,
-        newData: menuItem.toObject(),
+        newData: menuItem.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -322,7 +322,7 @@ export const updateMenuItem = asyncHandler(
         resourceId: menuItem._id.toString(),
         description: `${req.user.name} updated menu item: ${menuItem.name}`,
         previousData,
-        newData: updatedMenuItem.toObject(),
+        newData: updatedMenuItem.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -440,7 +440,7 @@ export const deleteMenuItem = asyncHandler(
         resource: 'Inventory',
         resourceId: menuItem._id.toString(),
         description: `${req.user.name} deleted menu item: ${menuItem.name} (${menuItem.category}) — ${formatETB(menuItem.price)}`,
-        previousData: menuItem.toObject(),
+        previousData: menuItem.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

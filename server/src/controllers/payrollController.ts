@@ -591,7 +591,7 @@ export const approvePayroll = asyncHandler(
     payroll.approvedBy = req.user?._id;
     await payroll.save();
 
-    const staff = payroll.staff as {
+    const staff = payroll.staff as unknown as {
       fullName: string;
       position: string;
     };
@@ -672,7 +672,7 @@ export const markPayrollPaid = asyncHandler(
     payroll.paidAt = new Date();
     await payroll.save();
 
-    const staff = payroll.staff as {
+    const staff = payroll.staff as unknown as {
       fullName: string;
       position: string;
     };
@@ -730,7 +730,7 @@ export const deletePayroll = asyncHandler(
       );
     }
 
-    const staff = payroll.staff as { fullName: string };
+    const staff = payroll.staff as unknown as { fullName: string };
 
     await payroll.deleteOne();
 

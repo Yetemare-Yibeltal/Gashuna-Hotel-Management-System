@@ -69,8 +69,8 @@ export interface IAuditLog extends Document {
   resource: AuditResource;
   resourceId?: string;
   description: string;
-  previousData?: Record<string, unknown>;
-  newData?: Record<string, unknown>;
+  previousData?: any;
+  newData?: any;
   ipAddress?: string;
   userAgent?: string;
   success: boolean;

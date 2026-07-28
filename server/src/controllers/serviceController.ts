@@ -32,7 +32,7 @@ export const getServices = asyncHandler(
 
     const sortField = (sortBy as string) || 'category';
     const sortOrder = order === 'desc' ? -1 : 1;
-    const sortObj: Record<string, number> = {
+    const sortObj: any = {
       [sortField]: sortOrder,
       name: 1,
     };
@@ -230,7 +230,7 @@ export const updateService = asyncHandler(
         resourceId: service._id.toString(),
         description: `${req.user.name} updated service: ${service.name}`,
         previousData,
-        newData: updatedService.toObject(),
+        newData: updatedService.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -290,7 +290,7 @@ export const deleteService = asyncHandler(
         resource: 'Service',
         resourceId: service._id.toString(),
         description: `${req.user.name} deleted service: ${service.name}`,
-        previousData: service.toObject(),
+        previousData: service.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

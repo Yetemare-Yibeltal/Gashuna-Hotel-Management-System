@@ -51,7 +51,7 @@ export const getInvoices = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'createdAt';
     const sortOrder = order === 'asc' ? 1 : -1;
-    const sortObj: Record<string, number> = { [sortField]: sortOrder };
+    const sortObj: any = { [sortField]: sortOrder };
 
     const [invoices, total] = await Promise.all([
       Invoice.find(filter)
@@ -350,7 +350,7 @@ export const createInvoice = asyncHandler(
         resource: 'Invoice',
         resourceId: invoice._id.toString(),
         description: `${req.user.name} created invoice ${invoiceNumber} for ${guest.fullName}. Total: ${formatETB(invoice.total)}`,
-        newData: invoice.toObject(),
+        newData: invoice.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -724,12 +724,12 @@ export const emailInvoice = asyncHandler(
       );
     }
 
-    const guest = invoice.guest as {
+    const guest = invoice.guest as any as {
       fullName: string;
       email?: string;
     };
 
-    if (!guest.email) {
+    if (!(invoice.guest as any)?.email) {
       return next(
         new AppError(
           `Guest ${guest.fullName} does not have an email address on file. Please update their profile first.`,
@@ -740,7 +740,7 @@ export const emailInvoice = asyncHandler(
 
     // ── Send invoice email ────────────────────────────────────
     try {
-      await sendInvoiceEmail(guest.email, {
+      await sendInvoiceEmail((invoice.guest as any)?.email, {
         guestName: guest.fullName,
         invoiceNumber: invoice.invoiceNumber,
         subtotal: invoice.subtotal,
@@ -758,7 +758,7 @@ export const emailInvoice = asyncHandler(
     } catch {
       return next(
         new AppError(
-          `Failed to send invoice email to ${guest.email}. Please try again.`,
+          `Failed to send invoice email to ${(invoice.guest as any)?.email}. Please try again.`,
           500
         )
       );
@@ -766,7 +766,7 @@ export const emailInvoice = asyncHandler(
 
     res.status(200).json({
       success: true,
-      message: `Invoice ${invoice.invoiceNumber} sent to ${guest.email} successfully.`,
+      message: `Invoice ${invoice.invoiceNumber} sent to ${(invoice.guest as any)?.email} successfully.`,
     });
   }
 );

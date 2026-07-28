@@ -220,7 +220,7 @@ export const checkInGuest = asyncHandler(
       room: booking.room,
       status: 'checked_in',
       checkInTime: new Date(),
-      checkedInBy: req.user?._id,
+      checkedInBy: req.user?._id as any,
       roomKeyNumber: roomKeyNumber || '',
       securityDeposit: securityDeposit || 0,
       depositCurrency: 'ETB',
@@ -253,13 +253,13 @@ export const checkInGuest = asyncHandler(
     await checkIn.populate('booking', 'bookingRef checkIn checkOut');
     await checkIn.populate('checkedInBy', 'name role');
 
-    const guest = booking.guest as {
+    const guest = booking.guest as any as {
       _id: string;
       fullName: string;
       vip: boolean;
     };
 
-    const room = booking.room as {
+    const room = booking.room as any as {
       _id: string;
       name: string;
       roomNumber: string;
@@ -280,8 +280,8 @@ export const checkInGuest = asyncHandler(
         message: `${guest.fullName} has checked in to Room ${room.roomNumber} — ${room.name}. ${guest.vip ? '⭐ VIP Guest' : ''}`,
         link: `/admin/reservations/${booking._id}`,
         relatedBooking: booking._id,
-        relatedGuest: guest._id,
-        relatedRoom: room._id,
+        relatedGuest: guest._id as any,
+        relatedRoom: room._id as any,
       });
     }
 
@@ -361,7 +361,7 @@ export const checkOutGuest = asyncHandler(
     await Booking.findByIdAndUpdate(checkIn.booking, {
       status: 'checked_out',
       actualCheckOutTime: new Date(),
-      checkedOutBy: req.user?._id,
+      checkedOutBy: req.user?._id as any,
     });
 
     // ── Update room status to cleaning ────────────────────────
@@ -393,11 +393,11 @@ export const checkOutGuest = asyncHandler(
       estimatedDuration: 45,
     });
 
-    const guest = checkIn.guest as {
+    const guest = checkIn.guest as unknown as {
       fullName: string;
     };
 
-    const room = checkIn.room as {
+    const room = checkIn.room as unknown as {
       name: string;
       roomNumber: string;
     };

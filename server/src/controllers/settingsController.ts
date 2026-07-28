@@ -350,7 +350,7 @@ export const deleteUser = asyncHandler(
         resource: 'User',
         resourceId: user._id.toString(),
         description: `${req.user.name} deleted user account: ${user.name} (${user.role}) — ${user.email}`,
-        previousData: user.toObject(),
+        previousData: user.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

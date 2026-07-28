@@ -445,7 +445,7 @@ export const clockIn = asyncHandler(
       rotating: 8,
     };
 
-    const staff = attendance.staff as {
+    const staff = attendance.staff as unknown as {
       fullName: string;
       shift: string;
     };
@@ -519,7 +519,7 @@ export const clockOut = asyncHandler(
     // Pre-save hook calculates hoursWorked and half_day status
     await attendance.save();
 
-    const staff = attendance.staff as { fullName: string };
+    const staff = attendance.staff as unknown as { fullName: string };
 
     res.status(200).json({
       success: true,
@@ -561,7 +561,7 @@ export const approveLeave = asyncHandler(
     attendance.approvedBy = req.user?._id;
     await attendance.save();
 
-    const staff = attendance.staff as { fullName: string };
+    const staff = attendance.staff as unknown as { fullName: string };
 
     // ── Audit log ─────────────────────────────────────────────
     if (req.user) {

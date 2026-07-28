@@ -67,7 +67,7 @@ export const getAllStaff = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'fullName';
     const sortOrder = order === 'desc' ? -1 : 1;
-    const sortObj: Record<string, number> = {
+    const sortObj: any = {
       [sortField]: sortOrder,
     };
 
@@ -342,7 +342,7 @@ export const createStaff = asyncHandler(
         resource: 'Staff',
         resourceId: staff._id.toString(),
         description: `${req.user.name} created new staff record: ${fullName} — ${position} (${department}). Salary: ${formatETB(Number(salary))}`,
-        newData: staff.toObject(),
+        newData: staff.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -417,7 +417,7 @@ export const updateStaff = asyncHandler(
         resourceId: staff._id.toString(),
         description: `${req.user.name} updated staff record: ${staff.fullName}`,
         previousData,
-        newData: updatedStaff.toObject(),
+        newData: updatedStaff.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -589,7 +589,7 @@ export const deleteStaff = asyncHandler(
         resource: 'Staff',
         resourceId: staff._id.toString(),
         description: `${req.user.name} deleted staff record: ${staff.fullName} — ${staff.position} (${staff.department})`,
-        previousData: staff.toObject(),
+        previousData: staff.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

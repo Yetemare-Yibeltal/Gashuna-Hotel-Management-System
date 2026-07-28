@@ -6,7 +6,6 @@ import {
   generateOccupancyReport,
   generateGuestReport,
   generatePayrollReport,
-  generateInventoryReport,
   deleteReport,
 } from '../controllers/reportController';
 import { protect, authorize } from '../middleware/authMiddleware';
@@ -49,12 +48,6 @@ router.post(
   '/generate/payroll',
   authorize('admin'),
   generatePayrollReport
-);
-
-router.post(
-  '/generate/inventory',
-  authorize('admin', 'manager'),
-  generateInventoryReport
 );
 
 router.delete(

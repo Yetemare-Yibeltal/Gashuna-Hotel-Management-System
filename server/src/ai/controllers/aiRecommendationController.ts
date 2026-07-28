@@ -7,8 +7,8 @@ import {
   getServiceRecommendations,
 } from '../services/recommendationService';
 import { AuthRequest } from '../../middleware/authMiddleware';
-import Room from '../../../models/Room';
-import Guest from '../../../models/Guest';
+import Room from '../../models/Room';
+import Guest from '../../models/Guest';
 
 export const getRoomRecommendations = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -151,7 +151,7 @@ export const getSimilarRooms = asyncHandler(
     };
 
     if (checkIn && checkOut) {
-      const { default: Booking } = await import('../../../models/Booking');
+      const { default: Booking } = await import('../../models/Booking');
       const bookedRoomIds = await Booking.distinct('room', {
         status: { $in: ['pending', 'confirmed', 'checked_in'] },
         checkIn: { $lt: new Date(checkOut as string) },
@@ -180,7 +180,7 @@ export const getSimilarRooms = asyncHandler(
 
 export const getPopularRooms = asyncHandler(
   async (req: Request, res: Response) => {
-    const { default: Booking } = await import('../../../models/Booking');
+    const { default: Booking } = await import('../../models/Booking');
 
     const popularRoomIds = await Booking.aggregate([
       {

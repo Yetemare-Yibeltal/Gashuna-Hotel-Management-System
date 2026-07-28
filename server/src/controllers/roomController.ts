@@ -72,7 +72,7 @@ export const getRooms = asyncHandler(
     // ── Build sort object ─────────────────────────────────────
     const sortField = (sortBy as string) || 'price';
     const sortOrder = order === 'desc' ? -1 : 1;
-    const sortObj: Record<string, number> = { [sortField]: sortOrder };
+    const sortObj: any = { [sortField]: sortOrder };
 
     const rooms = await Room.find(filter).sort(sortObj);
 
@@ -330,7 +330,7 @@ export const createRoom = asyncHandler(
         resource: 'Room',
         resourceId: room._id.toString(),
         description: `${req.user.name} created new room: ${room.name} (Room ${room.roomNumber})`,
-        newData: room.toObject(),
+        newData: room.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -396,7 +396,7 @@ export const updateRoom = asyncHandler(
         resourceId: room._id.toString(),
         description: `${req.user.name} updated room: ${room.name} (Room ${room.roomNumber})`,
         previousData,
-        newData: updatedRoom.toObject(),
+        newData: updatedRoom.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });
@@ -519,7 +519,7 @@ export const deleteRoom = asyncHandler(
         resource: 'Room',
         resourceId: room._id.toString(),
         description: `${req.user.name} deactivated Room ${room.roomNumber} — ${room.name}`,
-        previousData: room.toObject(),
+        previousData: room.toObject() as any,
         ipAddress: req.ip,
         success: true,
       });

@@ -23,6 +23,8 @@
 // ─────────────────────────────────────────────────────────────
 
 import { Request, Response, NextFunction } from 'express';
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 
 // ── Type Definition ───────────────────────────────────────────
 // Defines what an async Express handler function looks like

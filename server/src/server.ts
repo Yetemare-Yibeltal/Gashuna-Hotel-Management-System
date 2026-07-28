@@ -4,7 +4,7 @@ dotenv.config();
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import app from './app';
-import connectDB from './config/db';
+import { connectDB } from './config/db';
 import { startReminderJob } from './jobs/reminderJob';
 import { startInventoryAlertJob } from './jobs/inventoryAlertJob';
 import { startReportJob } from './jobs/reportJob';

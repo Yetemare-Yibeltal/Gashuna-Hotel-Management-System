@@ -321,7 +321,7 @@ export const refundPayment = asyncHandler(
       );
     }
 
-    if (payment.status === 'refunded') {
+    if ((payment.status as string) === 'refunded') {
       return next(
         new AppError('This payment has already been refunded.', 400)
       );

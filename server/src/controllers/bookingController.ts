@@ -74,7 +74,7 @@ export const getBookings = asyncHandler(
     // ── Sort ──────────────────────────────────────────────────
     const sortField = (sortBy as string) || 'createdAt';
     const sortOrder = order === 'asc' ? 1 : -1;
-    const sortObj: Record<string, number> = { [sortField]: sortOrder };
+    const sortObj: any = { [sortField]: sortOrder };
 
     const [bookings, total] = await Promise.all([
       Booking.find(filter)
@@ -629,7 +629,7 @@ export const checkOutGuest = asyncHandler(
     await Room.findByIdAndUpdate(booking.room, { status: 'cleaning' });
 
     // ── Update guest loyalty points and stats ─────────────────
-    const guest = booking.guest as {
+    const guest = booking.guest as unknown as {
       _id: string;
       fullName: string;
       loyaltyPoints: number;
@@ -678,7 +678,7 @@ export const checkOutGuest = asyncHandler(
 
     res.status(200).json({
       success: true,
-      message: `Guest checked out successfully. ${pointsEarned} loyalty points awarded to ${guest.fullName}. Room ${(booking.room as { roomNumber: string }).roomNumber} is now being cleaned.`,
+      message: `Guest checked out successfully. ${pointsEarned} loyalty points awarded to ${guest.fullName}. Room ${(booking.room as unknown as { roomNumber: string }).roomNumber} is now being cleaned.`,
       booking,
       loyaltyPointsEarned: pointsEarned,
     });
@@ -781,7 +781,7 @@ export const deleteBooking = asyncHandler(
         resource: 'Booking',
         resourceId: booking._id.toString(),
         description: `${req.user.name} deleted pending booking ${booking.bookingRef}`,
-        previousData: booking.toObject(),
+        previousData: booking.toObject() as unknown as Record<string, unknown>,
         ipAddress: req.ip,
         success: true,
       });

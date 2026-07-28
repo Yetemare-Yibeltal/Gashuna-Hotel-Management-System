@@ -332,7 +332,7 @@ export const resolveMaintenanceRequest = asyncHandler(
     await request.save();
 
     if (request.requiresRoomClosure && request.room) {
-      const room = request.room as { _id: string };
+      const room = request.room as any as { _id: string };
       await Room.findByIdAndUpdate(room._id, { status: 'available' });
     }
 
@@ -424,7 +424,7 @@ export const cancelMaintenanceRequest = asyncHandler(
     await request.save();
 
     if (request.requiresRoomClosure && request.room) {
-      const room = request.room as { _id: string };
+      const room = request.room as any as { _id: string };
       await Room.findByIdAndUpdate(room._id, { status: 'available' });
     }
 
