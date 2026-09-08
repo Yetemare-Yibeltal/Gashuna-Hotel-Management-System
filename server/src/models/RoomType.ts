@@ -192,7 +192,6 @@ const roomTypeSchema = new Schema<IRoomType>(
 // ── Indexes ────────────────────────────────────────────────────
 // Speeds up looking up a room type by its slug
 // (used frequently when loading room type details)
-roomTypeSchema.index({ slug: 1 });
 
 // Speeds up sorting room types by display order on the website
 roomTypeSchema.index({ displayOrder: 1 });

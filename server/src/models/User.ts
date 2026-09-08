@@ -132,7 +132,6 @@ const userSchema = new Schema<IUser>(
 
 // ── Index ──────────────────────────────────────────────────────
 // Speeds up queries that search by email (used on every login)
-userSchema.index({ email: 1 });
 
 // ── Pre-Save Hook: Hash Password ──────────────────────────────
 // Runs automatically before every save() call

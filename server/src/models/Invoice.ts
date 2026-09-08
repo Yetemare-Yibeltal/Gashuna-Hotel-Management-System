@@ -237,7 +237,6 @@ const invoiceSchema = new Schema<IInvoice>(
 );
 
 // ── Indexes ────────────────────────────────────────────────────
-invoiceSchema.index({ invoiceNumber: 1 });
 invoiceSchema.index({ guest: 1 });
 invoiceSchema.index({ status: 1 });
 invoiceSchema.index({ booking: 1 });

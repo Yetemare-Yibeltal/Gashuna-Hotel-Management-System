@@ -270,7 +270,6 @@ bookingSchema.index({ room: 1, checkIn: 1, checkOut: 1 });
 bookingSchema.index({ status: 1 });
 
 // Speeds up looking up a booking by its reference number
-bookingSchema.index({ bookingRef: 1 });
 
 // Speeds up finding all bookings for a specific guest
 bookingSchema.index({ guest: 1 });
