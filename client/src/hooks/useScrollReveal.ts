@@ -6,14 +6,6 @@ interface ScrollRevealOptions {
   triggerOnce?: boolean;
 }
 
-import { useEffect, useRef, useState } from 'react';
-
-interface ScrollRevealOptions {
-  threshold?: number;
-  rootMargin?: string;
-  triggerOnce?: boolean;
-}
-
 export const useScrollReveal = <T extends HTMLElement = HTMLDivElement>(
   options: ScrollRevealOptions = {}
 ) => {
