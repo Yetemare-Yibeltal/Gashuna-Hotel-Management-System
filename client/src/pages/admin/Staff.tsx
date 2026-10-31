@@ -131,7 +131,7 @@ export default function Staff() {
           <Button variant="ghost" size="sm">Edit</Button>
           {row.status === 'active' && (
             <Button
-              variant="warning"
+              variant="outline"
               size="sm"
               onClick={(e) => { e.stopPropagation(); updateStatus({ id: row._id, status: 'on_leave' }); }}
             >
