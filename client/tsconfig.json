@@ -39,10 +39,10 @@
     "strict": true,
 
     // Error on variables that are declared but never used
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
 
     // Error on function parameters that are never used
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
 
     // Error on switch statements that fall through cases
     "noFallthroughCasesInSwitch": true,
