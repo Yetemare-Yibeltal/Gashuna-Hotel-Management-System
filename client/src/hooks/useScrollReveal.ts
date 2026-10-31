@@ -6,9 +6,19 @@ interface ScrollRevealOptions {
   triggerOnce?: boolean;
 }
 
-export const useScrollReveal = (options: ScrollRevealOptions = {}) => {
+import { useEffect, useRef, useState } from 'react';
+
+interface ScrollRevealOptions {
+  threshold?: number;
+  rootMargin?: string;
+  triggerOnce?: boolean;
+}
+
+export const useScrollReveal = <T extends HTMLElement = HTMLDivElement>(
+  options: ScrollRevealOptions = {}
+) => {
   const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<T>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
