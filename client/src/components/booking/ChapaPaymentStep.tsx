@@ -17,7 +17,9 @@ export default function ChapaPaymentStep() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const { mutateAsync: createBooking } = useCreateBooking();
-
+if (!selectedRoom) {
+  return <p className="text-white/50 text-center py-8">Please select a room first.</p>;
+}
   const subtotal = selectedRoom ? selectedRoom.price * nights : 0;
   const vat = subtotal * HOTEL.vatRate;
   const total = subtotal + vat;
