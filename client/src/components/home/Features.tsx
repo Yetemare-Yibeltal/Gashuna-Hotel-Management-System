@@ -22,10 +22,10 @@ const features = [
 ];
 
 export default function Features() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
 
   return (
-    <section className="py-24 bg-neutral-950 relative" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-24 bg-neutral-950 relative" ref={ref}>
       <div className="absolute inset-0 bg-hotel-pattern opacity-20" />
       <div className="max-w-7xl mx-auto px-6 relative">
         {/* Header */}

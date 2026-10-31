@@ -13,10 +13,10 @@ const dishes = [
 ];
 
 export default function Cuisine() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
 
   return (
-    <section className="py-24 bg-neutral-950 relative" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-24 bg-neutral-950 relative" ref={ref}>
       <div className="absolute inset-0 bg-hotel-pattern opacity-10" />
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className="grid lg:grid-cols-2 gap-16 items-center">

@@ -84,7 +84,7 @@ export default function Gallery() {
         {/* Gallery Grid */}
         <div
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          ref={ref as React.RefObject<HTMLElement>}
+          ref={ref}
         >
           {filtered.map((item, idx) => (
             <div

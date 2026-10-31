@@ -6,7 +6,7 @@ import { useRooms } from '../../hooks/useRooms';
 import { SkeletonCard } from '../ui/Skeleton';
 
 export default function RoomsPreview() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
   const { data, isLoading } = useRooms({ limit: 4, status: 'available' });
 
   const rooms = data?.rooms || [];
@@ -19,7 +19,7 @@ export default function RoomsPreview() {
   };
 
   return (
-    <section className="py-24 bg-slate-950 relative" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-24 bg-slate-950 relative" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}
         <div className={classNames('flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-6 transition-all duration-700', isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8')}>

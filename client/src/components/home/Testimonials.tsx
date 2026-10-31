@@ -47,7 +47,7 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
@@ -60,7 +60,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-24 bg-slate-950 relative overflow-hidden" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-24 bg-slate-950 relative overflow-hidden" ref={ref}>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-600/30 to-transparent" />
       <div className="max-w-7xl mx-auto px-6">
         {/* Header */}

@@ -51,7 +51,7 @@ export default function About() {
         </div>
 
         {/* Story */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20" ref={ref as React.RefObject<HTMLElement>}>
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-20" ref={ref}>
           <div className={classNames('transition-all duration-700', isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8')}>
             <h2 className="text-4xl font-bold text-white mb-6" style={{ fontFamily: 'Playfair Display, serif' }}>
               Rooted in Dangla,<br />
@@ -122,7 +122,7 @@ export default function About() {
               <p className="text-white/30 text-xs mt-1 font-amharic">{HOTEL.addressAmharic}</p>
             </div>
             <div className="flex gap-3">
-
+              <a
                 href="https://maps.google.com/?q=Gashuna+Hotel+Dangla+Ethiopia"
                 target="_blank"
                 rel="noreferrer"

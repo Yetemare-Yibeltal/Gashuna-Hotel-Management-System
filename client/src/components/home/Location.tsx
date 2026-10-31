@@ -5,10 +5,10 @@ import { classNames } from '../../lib/utils';
 import { HOTEL, LOCAL_ATTRACTIONS } from '../../config/constants';
 
 export default function Location() {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal<HTMLElement>();
 
   return (
-    <section className="py-24 bg-neutral-950 relative" ref={ref as React.RefObject<HTMLElement>}>
+    <section className="py-24 bg-neutral-950 relative" ref={ref}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left — Info */}
@@ -67,7 +67,7 @@ export default function Location() {
                     <p className="text-sm text-white">{value}</p>
                   </div>
                   {action && href && (
-
+                    <a
                       href={href}
                       target={href.startsWith('http') ? '_blank' : undefined}
                       rel="noreferrer"
@@ -96,7 +96,7 @@ export default function Location() {
                   <MapPin className="w-12 h-12 text-amber-500 mx-auto mb-3" />
                   <p className="text-white/60 font-medium">Gashuna Hotel</p>
                   <p className="text-white/30 text-sm">Dangla, Awi Zone, Amhara Region</p>
-
+                  <a
                     href="https://maps.google.com/?q=Gashuna+Hotel+Dangla+Ethiopia"
                     target="_blank"
                     rel="noreferrer"
